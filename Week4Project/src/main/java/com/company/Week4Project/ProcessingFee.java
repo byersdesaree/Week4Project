@@ -10,8 +10,8 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "processing_fee")
-
 public class ProcessingFee {
+    @Id
     @NotEmpty
     @Length(max = 20)
     private String processingFee;

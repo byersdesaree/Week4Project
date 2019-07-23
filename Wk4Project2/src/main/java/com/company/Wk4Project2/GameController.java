@@ -1,4 +1,5 @@
-package com.company.Week4Project;
+package com.company.Wk4Project2;
+
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class GameController {
     //returns games by ESRB
     @RequestMapping(value = "/games/{esrb}", method = RequestMethod.GET)
     public List<Game> findByESRB(@PathVariable String esrbRating){
-        return gameRepository.findByEsrbRating(esrbRating);
+        return gameRepository.findByESRB(esrbRating);
     }
 
     //returns games by Title
@@ -55,6 +56,5 @@ public class GameController {
         return gameRepository.findByTitle(title);
 
     }
-
-
 }
+
