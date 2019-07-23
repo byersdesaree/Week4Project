@@ -14,17 +14,17 @@ public class ProcessingFee {
     @Id
     @NotEmpty
     @Length(max = 20)
-    private String processingFee;
+    private String productType;
 
     @NumberFormat(pattern = "#,###.##")
     private Double fee;
 
     public String getProcessingFee() {
-        return processingFee;
+        return productType;
     }
 
     public void setProcessingFee(String processingFee) {
-        this.processingFee = processingFee;
+        this.productType = processingFee;
     }
 
     public Double getFee() {

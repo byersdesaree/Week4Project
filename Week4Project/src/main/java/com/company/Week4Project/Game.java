@@ -3,9 +3,11 @@ package com.company.Week4Project;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.NumberFormat;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -27,15 +29,14 @@ public class Game {
     @NotEmpty
     private String description;
 
-    @NotEmpty
-    @NumberFormat(pattern = "##,###.##")
+    @NotNull
+    @NumberFormat(pattern = "#,###.##")
     private Double price;
 
     @NotEmpty
     @Length(max = 50)
     private String studio;
 
-    @Length(max = 11)
     private Integer quantity;
 
     public Integer getGameId() {
