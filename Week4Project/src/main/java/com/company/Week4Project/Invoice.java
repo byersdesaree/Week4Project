@@ -25,22 +25,38 @@ public class Invoice {
     private String name;
 
     @NotEmpty
-    @Length(max = 30 )
+
     private String street;
 
     @NotEmpty
-    @Length(max = 30)
+
     private String city;
 
     @NotEmpty
-    @Length(min = 2, max = 2)
+
     private String state;
     //validate by state code
 
     @NotEmpty
-    @Length(max = 30 )
+
     private String zipcode;
     //validate with parseInt
+
+    private String itemType;
+
+    private Integer itemId;
+
+    private Double unitPrice;
+
+    private Integer quantity;
+
+    private Double subtotal;
+
+   private Double tax;
+
+   private Double processingFee;
+
+   private Double total;
 
     public Integer getInvoice_id() {
         return invoice_id;
@@ -153,29 +169,4 @@ public class Invoice {
     public void setTotal(Double total) {
         this.total = total;
     }
-
-    @NotEmpty
-    @Length(max = 20)
-    private String itemType;
-
-    @NotNull
-    private Integer itemId;
-
-    @NotNull
-    private Double unitPrice;
-
-    @NotNull
-    private Integer quantity;
-
-   @NotNull
-    private Double subtotal;
-
-   @NotNull
-   private Double tax;
-
-   @NotNull
-   private Double processingFee;
-
-   @NotNull
-   private Double total;
 }

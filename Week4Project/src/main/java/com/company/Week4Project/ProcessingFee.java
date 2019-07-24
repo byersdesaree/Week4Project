@@ -12,19 +12,16 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "processing_fee")
 public class ProcessingFee {
     @Id
-    @NotEmpty
-    @Length(max = 20)
-    private String productType;
+    private String itemType;
 
-    @NumberFormat(pattern = "#,###.##")
     private Double fee;
 
-    public String getProcessingFee() {
-        return productType;
+    public String getItemType() {
+        return itemType;
     }
 
-    public void setProcessingFee(String processingFee) {
-        this.productType = processingFee;
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
     public Double getFee() {

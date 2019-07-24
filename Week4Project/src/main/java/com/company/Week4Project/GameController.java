@@ -10,8 +10,15 @@ import java.util.List;
 
 @RestController
 public class GameController {
+
     @Autowired
     private Service service;
+
+    @RequestMapping(value = "/invoice", method = RequestMethod.POST)
+    public Invoice addInvoice(@RequestBody Invoice invoice){
+        service.addInvoice(invoice);
+        return invoice;
+    }
 
     //returns all games
     @RequestMapping(value = "/games", method = RequestMethod.GET)
