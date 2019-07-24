@@ -22,5 +22,11 @@ public class SalesTaxRate {
     @NotNull
     private Double rate;
 
+    public String getState() {
+        return state;
+    }
 
+    public Double getRate() {
+        return rate;
+    }
 }
