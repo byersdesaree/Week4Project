@@ -16,7 +16,10 @@ public class InvoiceService {
     processingFeeRepository processingFeeRepo;
     @Autowired
     InvoiceRepository invoiceRepo;
-
+    @Autowired
+    ConsoleRepository consoleRepo;
+    @Autowired
+    GameRepository gameRepo;
 
     public Invoice calculateInvoiceFromPurchasingItem(Invoice invoice) {
 
@@ -26,11 +29,13 @@ public class InvoiceService {
         Double salesTax = 0.0, processingFee = 0.0;
         //copyPurchasingItemIntoInvoice(invoice, purchasingItem);
 
-        TShirt tShirt = tShirtRepo.getOne((invoice.getItemId()));
 
-        invoice.setUnitPrice(tShirt.getPrice());
+
+
 
         int found = 0;
+
+
 
         for (processingFee processingFee1 : processingFeeRepo.findAll()) {
             if (processingFee1.getProductType().toLowerCase().equals(invoice.getItemType().toLowerCase()))
@@ -40,8 +45,14 @@ public class InvoiceService {
         if (found == 0)
             throw new IllegalArgumentException("Item type doesn't match - T-Shirts, Games, Consoles ");
 
+        ///////////////////////////////////////////////
+
+        if(invoice.getItemType().equals("T-Shirts"))
+        {
+            TShirt tShirt = tShirtRepo.getOne((invoice.getItemId()));
+            invoice.setUnitPrice(tShirt.getPrice());
             if (invoice.getQuantity() > 0) {
-                if (invoice.getQuantity() > tShirt.getQuantity()) {
+                if (invoice.getQuantity() >  tShirt.getQuantity()) {
                     throw new IllegalArgumentException("Quantity specified not available in the Inventory, " +
                             "Quantity Avbl: " + tShirt.getQuantity());
                 }
@@ -54,8 +65,50 @@ public class InvoiceService {
             } else
                 throw new IllegalArgumentException("Quantity should be greater than zero");
 
+        }
+        else if (invoice.getItemType().equals("Games"))
+        {
+            Game game = gameRepo.getOne(invoice.getItemId());
 
-        found =0;
+            invoice.setUnitPrice(game.getPrice());
+            if (invoice.getQuantity() > 0) {
+                if (invoice.getQuantity() >  game.getQuantity()) {
+                    throw new IllegalArgumentException("Quantity specified not available in the Inventory, " +
+                            "Quantity Avbl: " + game.getQuantity());
+                }
+
+
+                invoice.setSubtotal(invoice.getUnitPrice() * invoice.getQuantity());
+                game.setQuantity(game.getQuantity() - invoice.getQuantity());
+                gameRepo.save(game);
+
+            } else
+                throw new IllegalArgumentException("Quantity should be greater than zero");
+
+        }else
+        {
+
+            Console console = consoleRepo.getOne(invoice.getItemId());
+            invoice.setUnitPrice(console.getPrice());
+            if (invoice.getQuantity() > 0) {
+                if (invoice.getQuantity() >  console.getQuantity()) {
+                    throw new IllegalArgumentException("Quantity specified not available in the Inventory, " +
+                            "Quantity Avbl: " + console.getQuantity());
+                }
+
+
+                invoice.setSubtotal(invoice.getUnitPrice() * invoice.getQuantity());
+                console.setQuantity(console.getQuantity() - invoice.getQuantity());
+                consoleRepo.save(console);
+
+            } else
+                throw new IllegalArgumentException("Quantity should be greater than zero");
+
+        }
+        ///////////////////////////////////////////////////
+
+
+        found = 0;
         for (SalesTaxRate sales : salesTaxRateRepo.findAll()) {
             if (sales.getState().toLowerCase().equals(invoice.getState().toLowerCase()))
                 found = 1;
@@ -75,7 +128,7 @@ public class InvoiceService {
 
         invoice.setTax(salesTax);
         invoice.setProcessingFee(processingFee);
-        invoice.setTotal(invoice.getSubtotal()+ processingFee + salesTax);
+        invoice.setTotal(invoice.getSubtotal() + processingFee + salesTax);
 
         invoiceRepo.save(invoice);
 

@@ -19,12 +19,22 @@ public class CreateInvoiceController {
     @Autowired
     InvoiceRepository invoiceRepo;
 
+    @Autowired
+    processingFeeRepository processingFeeRepo;
+
+    @Autowired
+    Service invoiceServiceGames;
+
     @RequestMapping(value = "/gameStore/purchase", method = RequestMethod.POST)
     public Invoice calculateInvoice(@RequestBody @Valid Invoice invoice){
 
-        invoiceService.calculateInvoiceFromPurchasingItem(invoice);
-       // String s = invoiceService.calculateInvoiceFromPurchasingItem(purchasingItem);
+
+//return invoice.getItemType();
+            invoiceService.calculateInvoiceFromPurchasingItem(invoice);
+
+
         return invoice;
+
 
     }
 
