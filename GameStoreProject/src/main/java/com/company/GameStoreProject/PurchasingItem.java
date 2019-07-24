@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class PurchasingItem {
 
@@ -12,20 +13,21 @@ public class PurchasingItem {
     private String name;
 
     @NotEmpty
-    @Length(max = 30 )
+    @Length(max = 30 , message = "Expected street length - 30")
     private String street;
 
     @NotEmpty
-    @Length(max = 30)
+    @Length(max = 30, message = "Expected City length - 30")
     private String city;
 
     @NotEmpty
-    @Length(min = 2, max = 2)
+    @Size(min = 2, max =  2, message = "Expected state length - 2")
+
     private String state;
 
     //validate by state code
     @NotEmpty
-    @Length(max = 30 )
+    @Length(max = 30, message = "Expected zipcode length - 30")
     private String zipcode;
 
     @NotEmpty

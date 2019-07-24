@@ -122,17 +122,17 @@ public class Invoice {
     private String itemType;
     @NotNull
     private Integer itemId;
-    @NotNull
+
     private Double unitPrice;
     @NotNull
     private Integer quantity;
-    @NotNull
+
     private Double subtotal;
-    @NotNull
+
     private Double tax;
-    @NotNull
+
     private Double processingFee;
-    @NotNull
+
     private Double total;
 
 

@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class CreateInvoiceController {
@@ -14,12 +16,24 @@ public class CreateInvoiceController {
     @Autowired
     InvoiceService invoiceService;
 
+    @Autowired
+    InvoiceRepository invoiceRepo;
+
     @RequestMapping(value = "/gameStore/purchase", method = RequestMethod.POST)
-    public Invoice calculateInvoice(@RequestBody @Valid PurchasingItem purchasingItem){
-        Invoice invoice;
-        invoice = invoiceService.calculateInvoiceFromPurchasingItem(purchasingItem);
+    public Invoice calculateInvoice(@RequestBody @Valid Invoice invoice){
+
+        invoiceService.calculateInvoiceFromPurchasingItem(invoice);
        // String s = invoiceService.calculateInvoiceFromPurchasingItem(purchasingItem);
         return invoice;
+
+    }
+
+    @RequestMapping(value = "/gameStore/invoice", method = RequestMethod.GET)
+    public List<Invoice> calculateInvoice(){
+
+
+        // String s = invoiceService.calculateInvoiceFromPurchasingItem(purchasingItem);
+        return invoiceRepo.findAll();
 
     }
 }

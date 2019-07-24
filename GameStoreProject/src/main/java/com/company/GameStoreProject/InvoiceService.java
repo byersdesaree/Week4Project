@@ -14,61 +14,31 @@ public class InvoiceService {
     SalesTaxRateRepository salesTaxRateRepo;
     @Autowired
     processingFeeRepository processingFeeRepo;
+    @Autowired
+    InvoiceRepository invoiceRepo;
 
 
-    public Invoice calculateInvoiceFromPurchasingItem(PurchasingItem purchasingItem) {
-        //throw new IllegalArgumentException("I am able to execute here");
-
+    public Invoice calculateInvoiceFromPurchasingItem(Invoice invoice) {
 
         String S;
 
-        Invoice invoice = new Invoice();
+
         Double salesTax = 0.0, processingFee = 0.0;
-        copyPurchasingItemIntoInvoice(invoice, purchasingItem);
-//
-//        S = purchasingItem.getState() + "-" + purchasingItem.getQuantity().toString()+ "-"
-//                + purchasingItem.getCity()+ "-"+
-//                purchasingItem.getQuantity().toString() + "-"+
-//                purchasingItem.getState()+ "-"+
-//                purchasingItem.getItemType()+ "-" +
-//                purchasingItem.getItemId().toString()+ "-"+
-//                purchasingItem.getName();
-//
-//        S+="\n";
-//        S+=         invoice.getState() + "-" + invoice.getQuantity().toString()+ "-"
-//                + invoice.getCity()+ "-"+
-//                invoice.getQuantity().toString() + "-"+
-//                invoice.getState()+ "-"+
-//                invoice.getItemType()+ "-" +
-//                invoice.getItemId().toString()+ "-"+
-//                invoice.getName();
+        //copyPurchasingItemIntoInvoice(invoice, purchasingItem);
 
-
-        TShirt tShirt = tShirtRepo.getOne((purchasingItem.getItemId()));
-
-
-        //SalesTaxRate salesTaxRate = salesTaxRateRepo.findByState("AL");
-
-
-
-
-
+        TShirt tShirt = tShirtRepo.getOne((invoice.getItemId()));
 
         invoice.setUnitPrice(tShirt.getPrice());
 
-
         int found = 0;
-
 
         for (processingFee processingFee1 : processingFeeRepo.findAll()) {
             if (processingFee1.getProductType().toLowerCase().equals(invoice.getItemType().toLowerCase()))
                 found = 1;
         }
 
-
         if (found == 0)
-            throw new IllegalArgumentException("Item doesn't match - T-Shirts, Games, Consoles ");
-
+            throw new IllegalArgumentException("Item type doesn't match - T-Shirts, Games, Consoles ");
 
             if (invoice.getQuantity() > 0) {
                 if (invoice.getQuantity() > tShirt.getQuantity()) {
@@ -83,10 +53,6 @@ public class InvoiceService {
 
             } else
                 throw new IllegalArgumentException("Quantity should be greater than zero");
-        // if(purchasingItem.getQuantity() < tShirt.getQuantity()
-
-//        if(purchasingItem.getState().equals("AL"))
-//            return  S+"\n"+ "from tshirt->"+tShirt.getColor();
 
 
         found =0;
@@ -97,10 +63,7 @@ public class InvoiceService {
         if (found == 0)
             throw new IllegalArgumentException("Invalid State name entered");
 
-        found =0;
-
-
-        SalesTaxRate salesTaxRate = salesTaxRateRepo.getOne(purchasingItem.getState());
+        SalesTaxRate salesTaxRate = salesTaxRateRepo.getOne(invoice.getState());
 
 
         salesTax = invoice.getSubtotal() * salesTaxRate.getRate();
@@ -114,22 +77,21 @@ public class InvoiceService {
         invoice.setProcessingFee(processingFee);
         invoice.setTotal(invoice.getSubtotal()+ processingFee + salesTax);
 
-
-        //return invoice;
+        invoiceRepo.save(invoice);
 
         return invoice;
     }
 
-    public void copyPurchasingItemIntoInvoice(Invoice invoice, PurchasingItem purchasingItem) {
-
-
-        invoice.setName(purchasingItem.getName());
-        invoice.setStreet(purchasingItem.getStreet());
-        invoice.setCity(purchasingItem.getCity());
-        invoice.setState(purchasingItem.getState());
-        invoice.setZipcode(purchasingItem.getZipcode());
-        invoice.setItemType(purchasingItem.getItemType());
-        invoice.setItemId(purchasingItem.getItemId());
-        invoice.setQuantity(purchasingItem.getQuantity());
-    }
+//    public void copyPurchasingItemIntoInvoice(Invoice invoice, PurchasingItem purchasingItem) {
+//
+//
+//        invoice.setName(purchasingItem.getName());
+//        invoice.setStreet(purchasingItem.getStreet());
+//        invoice.setCity(purchasingItem.getCity());
+//        invoice.setState(purchasingItem.getState());
+//        invoice.setZipcode(purchasingItem.getZipcode());
+//        invoice.setItemType(purchasingItem.getItemType());
+//        invoice.setItemId(purchasingItem.getItemId());
+//        invoice.setQuantity(purchasingItem.getQuantity());
+//    }
 }
